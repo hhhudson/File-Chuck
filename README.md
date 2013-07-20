@@ -1,4 +1,4 @@
-Screen-File-Transfer
+File Chuck
 ====================
 
-Work in progress to transfer files between two computers equipped with monitors and webcams.
+This a work in progress that transfers file between two computers equipped with monitors and webcams.
