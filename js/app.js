@@ -6,7 +6,9 @@
 	/////////////////////////////////////////////////////
 	function setCanvas(input){
 		jQuery('#mainCanvas').qrcode({
-			text : input
+			text : input,
+			width: 512,
+			height: 512,
 		});
 	}
 	

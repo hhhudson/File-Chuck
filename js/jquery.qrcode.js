@@ -25,9 +25,9 @@
 
 			// create canvas element
 			//var canvas = document.createElement('canvas');
-			canvas.width = options.width;
-			canvas.height = options.height;
-			var ctx	 = canvas.getContext('2d');
+			//canvas.width = options.width;
+			//canvas.height = options.height;
+			var ctx = canvas.getContext('2d');
 
 			// compute tileW/tileH based on options.width/options.height
 			var tileW = options.width  / qrcode.getModuleCount();
@@ -42,9 +42,6 @@
 					ctx.fillRect(Math.round(col*tileW),Math.round(row*tileH), w, h);  
 				}	
 			}
-			// return just built canvas
-			// return canvas;
-			// not anymore!
 		}
 
 		return this.each(function(){
