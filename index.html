@@ -51,7 +51,8 @@
 					<h3 id="myModalLabel">Modal header</h3>
 				</div>
 				<div class="modal-body">
-					<canvas id="mainCanvas" width:"512" height:"512">Looks like your browser doesn't support the canvas element. Time to upgrade!</canvas>
+					<video id="webcamVideo" width="256" height="256"></video>
+					<canvas id="mainCanvas" width="512" height="512">Looks like your browser doesn't support the canvas element. Time to upgrade!</canvas>
 				</div>
 				<div class="modal-footer">
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Abort</button>
@@ -63,7 +64,7 @@
 			<div class="masthead">
 				<ul class="nav nav-pills pull-right">
 					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">How it Works</a></li>
+					<li><a href="#">What it does</a></li>
 					<li><a href="#">About the Project</a></li>
 				</ul>
 				<h3 class="muted">File Chuck</h3>
@@ -71,12 +72,14 @@
 
 			<hr>
 			
-			<noscript>
-				<div class="alert alert-block alert-error">
-					<h4>This project relies on Javascript.</h4>
-					Javascript is used to create and read data from your webcam, and is required for this to work, so you might want to enable it. Hey - just be glad it doesn't use Flash.
-				</div>
-			</noscript>
+			<div id="alerts">
+				<noscript>
+					<div class="alert alert-block alert-error">
+						<h4>This project relies on Javascript.</h4>
+						Javascript is used to create and read data from your webcam, and is required for this to work, so you might want to enable it. Hey - just be glad it doesn't use Flash.
+					</div>
+				</noscript>
+			</div>
 			
 			<div class="jumbotron">
 				<h1>File Chuck</h1>
@@ -84,9 +87,30 @@
 				<a class="btn btn-large btn-success" href="#modeModal" data-toggle="modal">Try it out.</a>
 			</div>
 
+			<hr>
+			<div class="row">
+				<h2>What it does <small>(the answer is Magic)</small></h2>
+				<div class="well well-small">
+					<p>Shoop didly do bah</p>
+				</div>
+			</div>
 
 			<hr>
-
+			<div class="row">
+				<h2>Frequently Asked Questions <small>(and by "frequent" I mean never)</small></h2>
+				<div class="well well-small">
+					<h4>Why would I ever need this?</h4>
+					<p>I honestly don't have a clue.</p>
+					<h4>What's the maximum bandwidth for this?</h4>
+					<p>TBD</p>
+					<h4>Why did you do $X? You should have done $Y.</h4>
+					<p>I don't have any sort of formal education in this - I'm actually an <a href="http://www.id.carleton.ca" alt="Industrial Design">Industrial Design Student</a>. If there's a better/faster/easier way to do any part of this, I'd really love to hear about it!</p>
+					<h4>Does it work on smartphones?</h4>
+					<p>I don't have the resources to test it, but apparently you can enable getUserMedia support on Chrome for Android by checking off "Enable WebRTC" flag under chrome://flags. Remember that you'd need a phone with a front-facing camera. It's also pretty resource-hungry, so I'm not 100% confident that it would work. If anyone has a chance to test it, I'd love to know!</p>
+				</div>
+			</div>
+				
+			<hr>
 			<div class="footer">
 				<p>Licensed under the Apache License Version 2.0 – Source available <a href="https://github.com/hhhudson/File-Chuck" alt="Clone on GitHub">on GitHub</a></p>
 			</div>

@@ -1,11 +1,27 @@
 
 
 ;(function($){
+	var mainCanvas = $('#mainCanvas');
+	var ctx = document.getElementById('mainCanvas').getContext('2d');
+	
+	var webcamVideo = document.getElementById('webcamVideo');
+	var localMediaStream = null;
+	
+	/////////////////////////////////////////////////////
+	//  Misc Operations
+	/////////////////////////////////////////////////////
+	
+	function addError(title, body) {
+		$('#modeModal').modal('hide');
+		$('#canvasModal').modal('hide');
+		$('#alerts').append('<div class="alert alert-block alert-error"><h4>'+title+'</h4>'+body+'</div>');
+	}
+	
 	/////////////////////////////////////////////////////
 	//  Canvas Operations
 	/////////////////////////////////////////////////////
 	function setCanvas(input){
-		jQuery('#mainCanvas').qrcode({
+		mainCanvas.qrcode({
 			text : input,
 			width: 512,
 			height: 512,
@@ -16,10 +32,58 @@
 	//  getUserMedia Operations
 	/////////////////////////////////////////////////////
 	
-	function hasGetUserMedia() {
+	function testGetUserMedia() {
 		// Opera is unprefixed.
-		return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+		if (!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia)) {
+			addError('Unsupported Browser', 'Your browser doesn\'t seem to support getUserMedia, which is used to read data from your webcam. Try an up-to-date version of Firefox, Opera or Chrome instead!');
+		}
 	}
+	
+	function enableWebcamStream(videoDomElement) {
+		videoDomElement.autoplay = true;
+		var getUserMedia = (
+			navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.oGetUserMedia ||
+			navigator.msieGetUserMedia ||
+			false
+		);
+		var onStream = function(stream) {
+			try {
+				/**
+				* Chrome / Opera
+				*/
+				videoDomElement.src = ( window.URL || window.webkitURL ).createObjectURL( stream );
+			} catch( e ) {
+				/**
+				* Firefox
+				*/
+				if( videoDomElement.srcObject ) {
+					videoDomElement.srcObject = stream;
+				} else {
+					videoDomElement.mozSrcObject = stream;
+				}
+				videoDomElement.play();
+			}
+		};
+		var onError = function( error ) {
+			console.log(error);
+		};
+		if(getUserMedia) {
+			getUserMedia.call( navigator, {"video" : true }, onStream, onError );
+		}
+	};
+	
+	function initVideoStream() {
+		try {
+			enableWebcamStream(webcamVideo);
+		} catch(e) {
+			console.log(e);
+			addError('Could not read from webcam', 'Hm. We can\'t seem to access your webcam. Please try reloading the page and approving the request at the top of this window for webcam access, or try this page in an up-to-date version of Firefox, Opera or Chrome instead!');
+		}
+	}
+	
 	
 	/////////////////////////////////////////////////////
 	//  Decode Operations
@@ -38,6 +102,7 @@
 	/////////////////////////////////////////////////////
 	$(window).load(function () {
 		
+		testGetUserMedia();
 		qrcode.callback = showInfo;
 		
 		$('#sendFile').click(function() {
@@ -45,7 +110,7 @@
 			$('#canvasModal').modal('show');
 			
 			var start = new Date().getTime();
-			for (i = 0; i < 100; ++i) {
+			for (i = 0; i < 1000; ++i) {
 				setCanvas('this is a very very long string');
 			}
 			var end = new Date().getTime();
@@ -56,7 +121,8 @@
 		$('#getFile').click(function() {
 			$('#modeModal').modal('hide')
 			$('#canvasModal').modal('show');
-			decodeQR();
+			initVideoStream();
+			//decodeQR();
 		});
 	});
 })(jQuery);
