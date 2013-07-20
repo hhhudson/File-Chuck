@@ -1,3 +1,7 @@
+/************************************************
+ *                MAIN STYLES                   *
+ ************************************************/
+
 body {
 	padding-top: 20px;
 	padding-bottom: 40px;
@@ -32,4 +36,29 @@ body {
 }
 .marketing p + h4 {
 	margin-top: 28px;
+}
+
+/************************************************
+ *               MODAL STYLES                   *
+ ************************************************/
+
+.modal-huge .modal-body
+{
+	max-height:94%;
+}
+.modal.modal-huge
+{
+	height:94%;
+	width:94%;
+	margin-left: -47%; 
+}
+.modal.modal-huge.fade.in {
+	top:3%;
+}
+@media (max-width: 768px) {
+	.modal.modal-huge
+	{
+		width:94%;
+		margin-left: 2%; 
+	}
 }
