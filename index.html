@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>File Chuck &middot; Punchcards, for the Web 2.0</title>
+		<title>File Chuck &middot; Like Punchcards, but more Web 2.0</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -10,31 +10,51 @@
 		<!-- styles -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
 		<link href="css/app.css" rel="stylesheet">
 		
 		<!-- Fav and touch icons -->
+		<!--
 		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
 		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
 			<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
 										<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
 																	 <link rel="shortcut icon" href="ico/favicon.png">
+		-->
 	</head>
 
 	<body>
 
 		<div class="container-narrow">
 
-			<div id="myModal" class="modal modal-huge hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div id="modeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Select Mode</h3>
+				</div>
+				<div class="modal-body">
+					<p>Drag a file into this left panel to send that file, or click the button on the right to watch for available files. Remember, you'll need two computers with monitors and webcams for this to work, one in each mode.</p>
+					<p>Use any file you like - it doesn't get sent over the internet, just processed locally.</p>
+					<div>
+						<button class="btn btn-large btn-block" type="button" id="sendFile">Send a file</button>
+						<button class="btn btn-large btn-block" type="button" id="getFile">Receive a file</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				</div>
+			</div>
+
+			<div id="canvasModal" class="modal modal-huge hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h3 id="myModalLabel">Modal header</h3>
 				</div>
 				<div class="modal-body">
-					<p>One fine body…</p>
+					<canvas id="mainCanvas" width:"256" height:"256">Looks like your browser doesn't support the canvas element. Time to upgrade!</canvas>
 				</div>
 				<div class="modal-footer">
-					<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-					<button class="btn btn-primary">Save changes</button>
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Abort</button>
 				</div>
 			</div>
 
@@ -61,7 +81,7 @@
 			<div class="jumbotron">
 				<h1>File Chuck</h1>
 				<p class="lead">This a work in progress that transfers files between two computers equipped with monitors and webcams. Take a minute to read how it works below!</p>
-				<a class="btn btn-large btn-success" href="#myModal" data-toggle="modal">Want to try it out?</a>
+				<a class="btn btn-large btn-success" href="#modeModal" data-toggle="modal">Try it out.</a>
 			</div>
 
 
@@ -77,6 +97,11 @@
 		================================================== -->
 		<script src="http://code.jquery.com/jquery.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/qrcode.js"></script>
+		<script src="js/jquery.qrcode.js"></script>
+		
+		<script src="js/app.js"></script>
 		
 		
 	</body>
