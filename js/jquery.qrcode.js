@@ -2,38 +2,36 @@
 	$.fn.qrcode = function(options) {
 		// if options is string, 
 		if( typeof options === 'string' ){
-			options	= { text: options };
+			options = { text: options };
 		}
 
 		// set default values
 		// typeNumber < 1 for automatic calculation
-		options	= $.extend( {}, {
-			render		: "canvas",
-			width		: 256,
-			height		: 256,
-			typeNumber	: -1,
-			correctLevel	: QRErrorCorrectLevel.H,
-                        background      : "#ffffff",
-                        foreground      : "#000000"
+		options = $.extend( {}, {
+			render : "canvas",
+			width : 256,
+			height : 256,
+			typeNumber : -1,
+			correctLevel : QRErrorCorrectLevel.H, background : "#ffffff", foreground : "#000000"
 		}, options);
 
-		var createCanvas	= function(canvas){
+		var createCanvas = function(canvas){
 			//NH: modified to simply load an existing canvas
 			
 			// create the qrcode itself
-			var qrcode	= new QRCode(options.typeNumber, options.correctLevel);
+			var qrcode = new QRCode(options.typeNumber, options.correctLevel);
 			qrcode.addData(options.text);
 			qrcode.make();
 
 			// create canvas element
-			//var canvas	= document.createElement('canvas');
-			canvas.width	= options.width;
-			canvas.height	= options.height;
-			var ctx		= canvas.getContext('2d');
+			//var canvas = document.createElement('canvas');
+			canvas.width = options.width;
+			canvas.height = options.height;
+			var ctx	 = canvas.getContext('2d');
 
 			// compute tileW/tileH based on options.width/options.height
-			var tileW	= options.width  / qrcode.getModuleCount();
-			var tileH	= options.height / qrcode.getModuleCount();
+			var tileW = options.width  / qrcode.getModuleCount();
+			var tileH = options.height / qrcode.getModuleCount();
 
 			// draw in the canvas
 			for( var row = 0; row < qrcode.getModuleCount(); row++ ){
