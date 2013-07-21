@@ -9,10 +9,10 @@
 	
 	var webcamCanvas = document.getElementById('webcamCanvas');
 	
-	var stage = '';
+	var stage = 0;
 	var role = '';
-	var length = 8;
 	var loop;
+	var length = 8;
 	
 	var lastRead = '';
 	
@@ -24,6 +24,7 @@
 		$('#modeModal').modal('hide');
 		$('#canvasModal').modal('hide');
 		$('#alerts').append('<div class="alert alert-block alert-error"><h4>'+title+'</h4>'+body+'</div>');
+		window.clearInterval(loop)
 	}
 	
 	function setter() {
@@ -168,13 +169,14 @@
 			break;
 			
 		case 2: // Check for sign of life from other end
+		
 			senderSetQR('SNDRDY');
 			getterOnDetect('SNDRDY', true, setQR, 'GETRDY');
 			senderOnDetect('GETRDY', true);
 			break;
 			
 		case 3: // Find max working resoulution
-		addError('YAY', 'Looks like this is working so far!');
+			addError('YAY', 'Looks like this is working so far!');
 			
 			break;
 			
@@ -213,20 +215,21 @@
 			$('#modeModal').modal('hide')
 			$('#canvasModal').modal('show');
 			
-			var start = new Date().getTime();
-			for (i = 0; i < 1000; ++i) {
-				setCanvas('this is a very very long string');
-			}
-			var end = new Date().getTime();
-			var time = end - start;
-			alert('Execution time: ' + time);
+			stage = 1;
+			role = 'SENDER';
+			loop = setInterval(mainLoop,150);
+			initVideoStream();
 			
 		});
 		$('#getFile').click(function() {
 			$('#modeModal').modal('hide')
 			$('#canvasModal').modal('show');
+			
+			stage = 1;
+			role = 'GETTER';
+			loop = setInterval(mainLoop,150);
 			initVideoStream();
-			//decodeQR();
+			
 		});
 	});
 })(jQuery);
