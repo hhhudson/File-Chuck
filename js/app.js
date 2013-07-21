@@ -2,10 +2,14 @@
 
 ;(function($){
 	var mainCanvas = $('#mainCanvas');
-	var ctx = document.getElementById('mainCanvas').getContext('2d');
+	//var ctx = document.getElementById('mainCanvas').getContext('2d');
 	
 	var webcamVideo = document.getElementById('webcamVideo');
 	var localMediaStream = null;
+	
+	var webcamCanvas = document.getElementById('webcamCanvas');
+	
+	
 	
 	/////////////////////////////////////////////////////
 	//  Misc Operations
@@ -67,34 +71,53 @@
 				videoDomElement.play();
 			}
 		};
-		var onError = function( error ) {
-			console.log(error);
+		var onError = function(error) {
+			throw error;
 		};
 		if(getUserMedia) {
-			getUserMedia.call( navigator, {"video" : true }, onStream, onError );
+			getUserMedia.call(navigator, {"video" : true }, onStream, onError);
 		}
 	};
 	
 	function initVideoStream() {
 		try {
+			
 			enableWebcamStream(webcamVideo);
+			
+			webcamVideo.addEventListener('loadeddata', function(){
+				webcamCanvas.width=Math.floor(webcamVideo.videoWidth/2);
+				webcamCanvas.height=Math.floor(webcamVideo.videoHeight/2);
+				
+				window.setInterval(decodeFromVideo,100);
+				
+				
+				
+			});
+			
 		} catch(e) {
-			console.log(e);
 			addError('Could not read from webcam', 'Hm. We can\'t seem to access your webcam. Please try reloading the page and approving the request at the top of this window for webcam access, or try this page in an up-to-date version of Firefox, Opera or Chrome instead!');
 		}
 	}
 	
+	function decodeFromVideo() {
+		webcamCanvas.getContext('2d').drawImage(webcamVideo,0,0,webcamCanvas.width,webcamCanvas.height);
+		//qrcode.decode(webcamCanvas.getContext('2d').getImageData(0,0,webcamCanvas.width,webcamCanvas.height));
+		qrcode.decode(webcamCanvas.toDataURL());
+		
+	}
 	
 	/////////////////////////////////////////////////////
 	//  Decode Operations
 	/////////////////////////////////////////////////////
 	
 	function decodeQR() {
-		qrcode.decode("qr.jpg")
+		qrcode.decode("screen.png");
 	}
 	
 	function showInfo(data) {
-		alert(data);
+		if (data != "error decoding QR Code") {
+			console.log(data);
+		}
 	}
 	
 	/////////////////////////////////////////////////////

@@ -51,8 +51,9 @@
 					<h3 id="myModalLabel">Modal header</h3>
 				</div>
 				<div class="modal-body">
-					<video id="webcamVideo" width="256" height="256"></video>
-					<canvas id="mainCanvas" width="512" height="512">Looks like your browser doesn't support the canvas element. Time to upgrade!</canvas>
+					<video id="webcamVideo"></video>
+					<canvas id="webcamCanvas"></canvas><!--used to process image data from the webcam-->
+					<canvas id="mainCanvas" width="512" height="512">Looks like your browser doesn't support the canvas element. Time to upgrade!</canvas><!--used to display QR codes-->
 				</div>
 				<div class="modal-footer">
 					<button class="btn" data-dismiss="modal" aria-hidden="true">Abort</button>
