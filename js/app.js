@@ -36,10 +36,14 @@
 	//  getUserMedia Operations
 	/////////////////////////////////////////////////////
 	
-	function testGetUserMedia() {
+	function testFeatureSupport() {
 		// Opera is unprefixed.
 		if (!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia)) {
 			addError('Unsupported Browser', 'Your browser doesn\'t seem to support getUserMedia, which is used to read data from your webcam. Try an up-to-date version of Firefox, Opera or Chrome instead!');
+		}
+		if(typeof(Worker)=="undefined") {
+			// No Web Worker support
+			addError('Unsupported Browser', 'Darn. Looks like your browser doesn\'t support webWorkers, which are used to improve processing speed. Please try this page in an up-to-date version of Firefox, Opera or Chrome instead!');
 		}
 	}
 	
@@ -125,7 +129,7 @@
 	/////////////////////////////////////////////////////
 	$(window).load(function () {
 		
-		testGetUserMedia();
+		testFeatureSupport();
 		qrcode.callback = showInfo;
 		
 		$('#sendFile').click(function() {
