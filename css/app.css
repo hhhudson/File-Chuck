@@ -62,3 +62,16 @@ body {
 		margin-left: 2%; 
 	}
 }
+
+/************************************************
+ *               UTILITY STYLES                 *
+ ************************************************/
+
+#webcamVideo, #webcamCanvas {
+	display: none;
+}
+
+#mainCanvas {
+	display: block;
+	margin: 0 auto;
+}

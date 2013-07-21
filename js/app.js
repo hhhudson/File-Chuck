@@ -219,6 +219,7 @@
 			role = 'SENDER';
 			loop = setInterval(mainLoop,150);
 			initVideoStream();
+			setQR('...');
 			
 		});
 		$('#getFile').click(function() {
@@ -229,6 +230,7 @@
 			role = 'GETTER';
 			loop = setInterval(mainLoop,150);
 			initVideoStream();
+			setQR('...');
 			
 		});
 	});
