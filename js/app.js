@@ -9,7 +9,12 @@
 	
 	var webcamCanvas = document.getElementById('webcamCanvas');
 	
+	var stage = '';
+	var role = '';
+	var length = 8;
+	var loop;
 	
+	var lastRead = '';
 	
 	/////////////////////////////////////////////////////
 	//  Misc Operations
@@ -21,17 +26,33 @@
 		$('#alerts').append('<div class="alert alert-block alert-error"><h4>'+title+'</h4>'+body+'</div>');
 	}
 	
+	function setter() {
+		if (role == 'setter') {
+			
+		}
+	}
+	
 	/////////////////////////////////////////////////////
 	//  Canvas Operations
 	/////////////////////////////////////////////////////
-	function setCanvas(input){
+	
+	function setQR(input) {
 		mainCanvas.qrcode({
 			text : input,
 			width: 512,
 			height: 512,
 		});
 	}
-	
+	function senderSetQR(input) {
+		if (role == 'SENDER') {
+			setQR(input);
+		}
+	}
+	function getterSetQR(input) {
+		if (role == 'GETTER') {
+			setQR(input);
+		}
+	}
 	/////////////////////////////////////////////////////
 	//  getUserMedia Operations
 	/////////////////////////////////////////////////////
@@ -48,6 +69,9 @@
 	}
 	
 	function enableWebcamStream(videoDomElement) {
+		/*
+		 * Shoot. This function should be credited to somebody else. I copied this from somewhere, but I've forgotten from where :(
+		 */
 		videoDomElement.autoplay = true;
 		var getUserMedia = (
 			navigator.getUserMedia ||
@@ -89,48 +113,101 @@
 			enableWebcamStream(webcamVideo);
 			
 			webcamVideo.addEventListener('loadeddata', function(){
-				webcamCanvas.width=Math.floor(webcamVideo.videoWidth/2);
-				webcamCanvas.height=Math.floor(webcamVideo.videoHeight/2);
-				
-				window.setInterval(decodeFromVideo,100);
-				
-				
-				
+				webcamCanvas.width=Math.floor(webcamVideo.videoWidth/1);
+				webcamCanvas.height=Math.floor(webcamVideo.videoHeight/1);
 			});
 			
 		} catch(e) {
-			addError('Could not read from webcam', 'Hm. We can\'t seem to access your webcam. Please try reloading the page and approving the request at the top of this window for webcam access, or try this page in an up-to-date version of Firefox, Opera or Chrome instead!');
+			addError('Could not read from webcam', 'Hm. We can\'t seem to access your webcam. Please try this page in an up-to-date version of Firefox, Opera or Chrome instead!');
 		}
 	}
 	
-	function decodeFromVideo() {
-		webcamCanvas.getContext('2d').drawImage(webcamVideo,0,0,webcamCanvas.width,webcamCanvas.height);
-		//qrcode.decode(webcamCanvas.getContext('2d').getImageData(0,0,webcamCanvas.width,webcamCanvas.height));
-		qrcode.decode(webcamCanvas.toDataURL());
-		
-	}
 	
 	/////////////////////////////////////////////////////
 	//  Decode Operations
 	/////////////////////////////////////////////////////
 	
-	function decodeQR() {
-		qrcode.decode("screen.png");
+	function decodeFromVideo() {
+		webcamCanvas.getContext('2d').drawImage(webcamVideo,0,0,webcamCanvas.width,webcamCanvas.height); //copy video to canvas
+		qrcode.decode(webcamCanvas.toDataURL()); //copy canvas to decoder
 	}
 	
-	function showInfo(data) {
-		if (data != "error decoding QR Code") {
-			console.log(data);
+	function decodeCallback(data) {
+		lastRead = data;
+	}
+	
+	function onDetect(trigger, advanceStage, callback, arg) {
+		decodeFromVideo();
+		if (lastRead == trigger) {
+			if (advanceStage) {
+				stage += 1;
+			}
+			callback(arg);
 		}
 	}
-	
+	function senderOnDetect(trigger, advanceStage, callback, arg) {
+		if (role == 'SENDER') {
+			onDetect(trigger, advanceStage, callback, arg);
+		}
+	}
+	function getterOnDetect(trigger, advanceStage, callback, arg) {
+		if (role == 'GETTER') {
+			onDetect(trigger, advanceStage, callback, arg);
+		}
+	}
 	/////////////////////////////////////////////////////
 	//  Main Flow
 	/////////////////////////////////////////////////////
+	
+	function mainLoop() {
+		switch(stage) {
+		case 1: // Display availability
+			senderSetQR('SND:0.10');
+			getterOnDetect('SND:0.10', true, setQR, 'GET:0.10');
+			senderOnDetect('GET:0.10', true);
+			break;
+			
+		case 2: // Check for sign of life from other end
+			senderSetQR('SNDRDY');
+			getterOnDetect('SNDRDY', true, setQR, 'GETRDY');
+			senderOnDetect('GETRDY', true);
+			break;
+			
+		case 3: // Find max working resoulution
+		addError('YAY', 'Looks like this is working so far!');
+			
+			break;
+			
+		case 4: // Confirm length from other end
+			
+			
+			break;
+			
+		case 5: // Main send
+			
+			
+			break;
+			
+		case 6: // Done!
+			
+			
+			break;
+			
+		case 7: // Clean up, and create file.
+			
+			
+			break;
+			
+		default:
+			addError('Unknown Error', 'Well, that shouldn\'t have happened. Somehow we\'ve hit an invalid state, and I don\'t know what to do. Try again?');
+		}
+	}
+	
+	
 	$(window).load(function () {
 		
 		testFeatureSupport();
-		qrcode.callback = showInfo;
+		qrcode.callback = decodeCallback;
 		
 		$('#sendFile').click(function() {
 			$('#modeModal').modal('hide')
