@@ -220,7 +220,7 @@
 			notify('Confirming connection...');
 			senderSetQR('SNDRDY');
 			getterOnDetect('SNDRDY', true, setQR, 'GETRDY');
-			senderOnDetect('GETRDY', true, setQR, 'ROK'+inputStr(length, length-3));
+			senderOnDetect('GETRDY', true, setQR, 'ROK'+padInt(length, length-3));
 			break;
 			
 		case 3: // Find max working resoulution
