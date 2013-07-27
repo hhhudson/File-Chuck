@@ -151,7 +151,9 @@
 			if (advanceStage) {
 				stage += 1;
 			}
-			callback(arg);
+			if (callback){
+				callback(arg);
+			}
 		}
 	}
 	function senderOnDetect(trigger, advanceStage, callback, arg) {
@@ -172,6 +174,7 @@
 			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'ROK') {
 				console.log(role+' FOUND RES SUBSTRING');
+				console.log(role+' ATTEMPTING TO PARSE '+lastRead.substring(3);
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed) && parsed>length) {
 					console.log(role+' PARSED VALID INT');
@@ -194,6 +197,7 @@
 			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'RES') {
 				console.log(role+' FOUND RES SUBSTRING');
+				console.log(role+' ATTEMPTING TO PARSE '+lastRead.substring(3);
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed)) {
 					console.log(role+' PARSED VALID INT');
