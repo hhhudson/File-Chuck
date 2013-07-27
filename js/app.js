@@ -179,13 +179,13 @@
 				if (!isNaN(parsed) && parsed>=length) {
 					console.log(role+' PARSED VALID INT');
 					length++;
-					setQR('RES'+inputStr(length, length-3));
+					setQR('RES'+padInt(length, length-3));
 					lengthLastUpdate = currentTime;
 				}
 			}
 			if(lengthLastUpdate + 10000 < currentTime) { //if no updates in a few seconds,
 				length-=1; //switch back a resolution level since this one obviously doesn't work.
-				length-=3; //switch back a few more resolution levels for safety.
+				//length-=3; //switch back a few more resolution levels for safety.
 				stage++; //switch to next stage
 			}
 		}
@@ -207,7 +207,7 @@
 				}
 			}
 			if(lengthLastUpdate + 10000 < currentTime) { //if no updates in a few seconds,
-				length-=3; //switch back a few resolution levels for safety.
+				//length-=3; //switch back a few resolution levels for safety.
 				stage++; //switch to next stage
 			}
 		}
