@@ -13,6 +13,7 @@
 	var role = '';
 	var loop;
 	var length = 8;
+	var lengthLastUpdate = 9007199254740992; //Max int in JS
 	
 	var lastRead = '';
 	
@@ -32,7 +33,13 @@
 		//alert(message);//chage to something more subtle later...
 		canvasTitle.text(message);
 	}
-	
+	function padInt(input, targetLength) {
+		var inputStr = input+"";
+		while (inputStr.length < targetLength) {
+			inputStr = "0" + inputStr;
+		};
+		return inputStr;
+	}
 	
 	
 	/////////////////////////////////////////////////////
@@ -56,6 +63,7 @@
 			setQR(input);
 		}
 	}
+	
 	/////////////////////////////////////////////////////
 	//  getUserMedia Operations
 	/////////////////////////////////////////////////////
@@ -134,11 +142,9 @@
 		webcamCanvas.getContext('2d').drawImage(webcamVideo,0,0,webcamCanvas.width,webcamCanvas.height); //copy video to canvas
 		qrcode.decode(webcamCanvas.toDataURL()); //copy canvas to decoder
 	}
-	
 	function decodeCallback(data) {
 		lastRead = data;
 	}
-	
 	function onDetect(trigger, advanceStage, callback, arg) {
 		decodeFromVideo();
 		if (lastRead == trigger) {
@@ -158,6 +164,45 @@
 			onDetect(trigger, advanceStage, callback, arg);
 		}
 	}
+	
+	function senderDetectResOK() {
+		if (role == 'SENDER') {
+			var currentTime = new Date().getTime();
+			decodeFromVideo();
+			if (lastRead.substring(0, 3) == 'ROK') {
+				var parsed = parseInt(lastRead.substring(3));
+				if (!isNaN(parsed) && parsed>length) {
+					length++;
+					setQR('ROK'+inputStr(length, length-3));
+					lengthLastUpdate = currentTime;
+				}
+			}
+			if(lengthLastUpdate + 10000 < currentTime) { //if no updates in a few seconds,
+				length-=1; //switch back a resolution level since this one obviously doesn't work.
+				length-=3; //switch back a few more resolution levels for safety.
+				stage++; //switch to next stage
+			}
+		}
+	}
+	function getterDetectRes() {
+		if (role == 'GETTER') {
+			var currentTime = new Date().getTime();
+			decodeFromVideo();
+			if (lastRead.substring(0, 3) == 'RES') {
+				var parsed = parseInt(lastRead.substring(3));
+				if (!isNaN(parsed)) {
+					length = parsed;
+					setQR('ROK'+parsed);
+					lengthLastUpdate = currentTime;
+				}
+			}
+			if(lengthLastUpdate + 10000 < currentTime) { //if no updates in a few seconds,
+				length-=3; //switch back a few resolution levels for safety.
+				stage++; //switch to next stage
+			}
+		}
+	}
+	
 	/////////////////////////////////////////////////////
 	//  Main Flow
 	/////////////////////////////////////////////////////
@@ -175,31 +220,26 @@
 			notify('Confirming connection...');
 			senderSetQR('SNDRDY');
 			getterOnDetect('SNDRDY', true, setQR, 'GETRDY');
-			senderOnDetect('GETRDY', true);
+			senderOnDetect('GETRDY', true, setQR, 'ROK'+inputStr(length, length-3));
 			break;
 			
 		case 3: // Find max working resoulution
-			notify('Determining resolution...');
-			addError('YAY', 'Looks like this is working so far!');
+			notify('Determining resolution (Checking '+length+')...');
+			getterDetectRes();
+			senderDetectResOK();
+			break;
+			
+		case 4: // Main send
+			notify('Finalized resolution of '+length+'!');
 			
 			break;
 			
-		case 4: // Confirm length from other end
-			
-			
-			break;
-			
-		case 5: // Main send
-			
-			
-			break;
-			
-		case 6: // Done!
+		case 5: // Done!
 			
 			
 			break;
 			
-		case 7: // Clean up, and create file.
+		case 6: // Clean up, and create file.
 			
 			
 			break;
