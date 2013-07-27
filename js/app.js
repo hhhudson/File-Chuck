@@ -169,7 +169,7 @@
 		if (role == 'SENDER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log('DECODED '+lasRead);
+			console.log('DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'ROK') {
 				console.log('FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
@@ -191,7 +191,7 @@
 		if (role == 'GETTER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log('DECODED '+lasRead);
+			console.log('DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'RES') {
 				console.log('FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
