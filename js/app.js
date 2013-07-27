@@ -169,12 +169,12 @@
 		if (role == 'SENDER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log('DECODED '+lastRead);
+			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'ROK') {
-				console.log('FOUND RES SUBSTRING');
+				console.log(role+' FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed) && parsed>length) {
-					console.log('PARSED VALID INT');
+					console.log(role+' PARSED VALID INT');
 					length++;
 					setQR('ROK'+inputStr(length, length-3));
 					lengthLastUpdate = currentTime;
@@ -267,7 +267,7 @@
 			
 			stage = 1;
 			role = 'SENDER';
-			loop = setInterval(mainLoop,150);
+			loop = setInterval(mainLoop,300);
 			initVideoStream();
 			setQR('...');
 			
