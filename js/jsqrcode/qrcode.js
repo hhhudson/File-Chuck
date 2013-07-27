@@ -74,7 +74,7 @@ qrcode.decode = function(src){
             }
             catch(e)
             {
-				console.log(e);
+				//console.log(e);
                 qrcode.result = "error decoding QR Code";
             }
 			if(qrcode.callback!=null)
@@ -141,7 +141,7 @@ qrcode.process = function(ctx){
 	
 	var end = new Date().getTime();
 	var time = end - start;
-	console.log(time);
+	//console.log(time);
     
 	return qrcode.decode_utf8(str);
 	//alert("Time:" + time + " Code: "+str);
