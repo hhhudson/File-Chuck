@@ -191,12 +191,12 @@
 		if (role == 'GETTER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log('DECODED '+lastRead);
+			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'RES') {
-				console.log('FOUND RES SUBSTRING');
+				console.log(role+' FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed)) {
-					console.log('PARSED VALID INT');
+					console.log(role+' PARSED VALID INT');
 					length = parsed;
 					setQR('ROK'+parsed);
 					lengthLastUpdate = currentTime;
