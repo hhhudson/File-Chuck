@@ -27,11 +27,11 @@
 		window.clearInterval(loop)
 	}
 	
-	function setter() {
-		if (role == 'setter') {
-			
-		}
+	function notify(message) {
+		alert(message);//chage to something more subtle later...
 	}
+	
+	
 	
 	/////////////////////////////////////////////////////
 	//  Canvas Operations
@@ -163,19 +163,21 @@
 	function mainLoop() {
 		switch(stage) {
 		case 1: // Display availability
-			senderSetQR('SND:0.10');
-			getterOnDetect('SND:0.10', true, setQR, 'GET:0.10');
-			senderOnDetect('GET:0.10', true);
+			notify('Waiting for connection...');
+			senderSetQR('SND0.1');
+			getterOnDetect('SND0.1', true, setQR, 'GET0.1');
+			senderOnDetect('GET0.1', true);
 			break;
 			
 		case 2: // Check for sign of life from other end
-		
+			notify('Confirming connection...');
 			senderSetQR('SNDRDY');
 			getterOnDetect('SNDRDY', true, setQR, 'GETRDY');
 			senderOnDetect('GETRDY', true);
 			break;
 			
 		case 3: // Find max working resoulution
+			notify('Determining resolution...');
 			addError('YAY', 'Looks like this is working so far!');
 			
 			break;

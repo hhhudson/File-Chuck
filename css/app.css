@@ -68,7 +68,9 @@ body {
  ************************************************/
 
 #webcamVideo, #webcamCanvas {
-	display: none;
+	height: 130px;
+	float: left;
+	clear: right;
 }
 
 #mainCanvas {
