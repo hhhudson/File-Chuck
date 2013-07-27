@@ -179,7 +179,7 @@
 				if (!isNaN(parsed) && parsed>=length) {
 					console.log(role+' PARSED VALID INT');
 					length++;
-					setQR('ROK'+inputStr(length, length-3));
+					setQR('RES'+inputStr(length, length-3));
 					lengthLastUpdate = currentTime;
 				}
 			}
