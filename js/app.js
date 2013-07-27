@@ -169,9 +169,12 @@
 		if (role == 'SENDER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
+			console.log('DECODED '+lasRead);
 			if (lastRead.substring(0, 3) == 'ROK') {
+				console.log('FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed) && parsed>length) {
+					console.log('PARSED VALID INT');
 					length++;
 					setQR('ROK'+inputStr(length, length-3));
 					lengthLastUpdate = currentTime;
@@ -188,9 +191,12 @@
 		if (role == 'GETTER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
+			console.log('DECODED '+lasRead);
 			if (lastRead.substring(0, 3) == 'RES') {
+				console.log('FOUND RES SUBSTRING');
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed)) {
+					console.log('PARSED VALID INT');
 					length = parsed;
 					setQR('ROK'+parsed);
 					lengthLastUpdate = currentTime;
