@@ -176,7 +176,7 @@
 				console.log(role+' FOUND RES SUBSTRING');
 				console.log(role+' ATTEMPTING TO PARSE '+lastRead.substring(3));
 				var parsed = parseInt(lastRead.substring(3));
-				if (!isNaN(parsed) && parsed>=length) {
+				if (!isNaN(parsed) && parsed==length) {
 					console.log(role+' PARSED VALID INT');
 					length++;
 					setQR('RES'+padInt(length, length-3));
