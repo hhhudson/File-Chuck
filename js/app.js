@@ -27,8 +27,10 @@
 		window.clearInterval(loop)
 	}
 	
+	canvasTitle = $('#canvasTitle');
 	function notify(message) {
-		alert(message);//chage to something more subtle later...
+		//alert(message);//chage to something more subtle later...
+		canvasTitle.text(message);
 	}
 	
 	
