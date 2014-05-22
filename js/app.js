@@ -15,6 +15,9 @@
 	var length = 8;
 	var lengthLastUpdate = 9007199254740992; //Max int in JS
 	
+	var currentChunk;
+	var totalChunks;
+	
 	var lastRead = '';
 	
 	/////////////////////////////////////////////////////
@@ -171,13 +174,9 @@
 		if (role == 'SENDER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'ROK') {
-				console.log(role+' FOUND RES SUBSTRING');
-				console.log(role+' ATTEMPTING TO PARSE '+lastRead.substring(3));
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed) && parsed==length) {
-					console.log(role+' PARSED VALID INT');
 					length++;
 					setQR('RES'+padInt(length, length-3));
 					lengthLastUpdate = currentTime;
@@ -194,13 +193,9 @@
 		if (role == 'GETTER') {
 			var currentTime = new Date().getTime();
 			decodeFromVideo();
-			console.log(role+' DECODED '+lastRead);
 			if (lastRead.substring(0, 3) == 'RES') {
-				console.log(role+' FOUND RES SUBSTRING');
-				console.log(role+' ATTEMPTING TO PARSE '+lastRead.substring(3));
 				var parsed = parseInt(lastRead.substring(3));
 				if (!isNaN(parsed)) {
-					console.log(role+' PARSED VALID INT');
 					length = parsed;
 					setQR('ROK'+parsed);
 					lengthLastUpdate = currentTime;
@@ -234,13 +229,22 @@
 			break;
 			
 		case 3: // Find max working resoulution
-			notify('Determining resolution (Checking '+length+')...');
+			if (role == 'SENDER') {
+				notify('Determining resolution (Checking '+length+')...');
+			} else {
+				notify('Determining resolution (Confirming '+length+')...');
+			}
 			getterDetectRes();
 			senderDetectResOK();
 			break;
 			
 		case 4: // Main send
-			notify('Finalized resolution of '+length+'!');
+			if (role == 'SENDER') {
+				notify('Sending file: part '+currentChunk+' of '+totalChucks+'...');
+			} else {
+				notify('Receiving file...');
+			}
+			
 			
 			break;
 			
@@ -281,6 +285,11 @@
 			$('#canvasModal').modal('show');
 			
 			stage = 1;
+			
+			lengthLastUpdate = 9007199254740992; //Max int in JS
+			currentChunk = 0;
+			totalChunks = 0;
+			
 			role = 'GETTER';
 			loop = setInterval(mainLoop,150);
 			initVideoStream();
